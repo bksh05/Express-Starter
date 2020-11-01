@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import IUserModel from '../interfaces/IDocuments/IUser.model';
  
 /**
  * Define the schema of User
@@ -23,6 +24,6 @@ const userSchema = new mongoose.Schema(
 /**
  * Create model using the schema
  */
-const UserModel = mongoose.model('User', userSchema);
+const UserModel = mongoose.model<IUserModel>('User', userSchema);
  
 export default UserModel;

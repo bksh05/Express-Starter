@@ -4,12 +4,12 @@ import { createUser, getAllUser } from "../../database"
 
 const registerUser = async (request: Request, response: Response) => {
     const user: User = request.body;
-    const result = await createUser(user);
+    const result : User = await createUser(user);
     response.json(result);
 }
 
 const fetchAllUser = async (request: Request, response: Response) => {
-    const allUsers = await getAllUser();
+    const allUsers : Array<User> = await getAllUser();
     response.json(allUsers);
 
 }
