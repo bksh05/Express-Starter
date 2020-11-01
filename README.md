@@ -1,2 +1,2 @@
 # Express-Starter
-A started app for express application with mongo database
+A starter app for express application with mongo database
