@@ -5,6 +5,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors')
 const app = express();
+const bodyParser = require('body-parser');
 
 
 /**
@@ -35,6 +36,15 @@ app.use(cors(corsOptions));
 
 
 
+/**
+ * Parse incoming request bodies in a middleware before your handlers
+ * By using this request body of a request is accessible
+ * For more detail : https://github.com/expressjs/body-parser
+ */
+
+app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
+app.use(bodyParser.json()) // parse application/json
+
 
 
 app.use('/api/ping' , function(request : Request , response : Response ) {
@@ -44,5 +54,5 @@ app.use('/api/ping' , function(request : Request , response : Response ) {
 })
 
 app.listen(3000 , () => {
-    console.log('lol')
+    console.log('Awesome!! Server has started at port:' ,3000)
 })
