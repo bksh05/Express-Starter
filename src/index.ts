@@ -50,16 +50,26 @@ app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-f
 app.use(bodyParser.json()) // parse application/json
 
 
-
+/**
+ * Ping request
+ * To test if the server is running
+ */
 app.use('/api/ping' , function(request : Request , response : Response ) {
     response.json({
         ping : "pinged"
     })
 })
 
-
+/**
+ * Registering all routes 
+ */
 app.use('/api/expstart' , registerRoutes());
 
+
+/**
+ * 1. Connect to database
+ * 2. If connection to database is complete then start the application
+ */
 connectDb().then(
     () => {
         app.listen(APPLICATION_CONFIG.PORT , () => {

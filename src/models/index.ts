@@ -3,11 +3,17 @@ import {DATABASE_CONFIG} from '../config'
 import UserModel from './user';
 
 
-
+/**
+ * Some mongoose configuration
+ */
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true); 
+
+/**
+ * Function to connect to mongodb
+ */
 const connectDb = () => {
     const options = {
         keepAlive : DATABASE_CONFIG.KEEP_ALIVE,
