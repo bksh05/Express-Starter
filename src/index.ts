@@ -1,6 +1,7 @@
 import {Request , Response} from "express";
 import { constants } from "./utils/constant";
-import APPLICATION_CONFIG from './config'
+import {APPLICATION_CONFIG} from './config'
+import { connectDb } from "./models";
 
 const express = require('express');
 const compression = require('compression');
@@ -55,6 +56,11 @@ app.use('/api/ping' , function(request : Request , response : Response ) {
     })
 })
 
-app.listen(APPLICATION_CONFIG.PORT , () => {
-    console.log(constants.START_MESSAGE,APPLICATION_CONFIG.PORT)
-})
+connectDb().then(
+    () => {
+        app.listen(APPLICATION_CONFIG.PORT , () => {
+            console.log(constants.START_MESSAGE,APPLICATION_CONFIG.PORT)
+        })
+    }
+)
+
