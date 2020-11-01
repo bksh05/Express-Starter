@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import {DATABASE_CONFIG} from '../config'
-import User from './user';
+import UserModel from './user';
 
 
 
@@ -18,8 +18,7 @@ const connectDb = () => {
     return mongoose.connect(DATABASE_CONFIG.URL , options);
 };
 
-const models = { User };
 
-export { connectDb };
 
-export default models;
+export { connectDb , UserModel};
+

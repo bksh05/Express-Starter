@@ -2,6 +2,7 @@ import {Request , Response} from "express";
 import { constants } from "./utils/constant";
 import {APPLICATION_CONFIG} from './config'
 import { connectDb } from "./models";
+import registerRoutes from "./controllers";
 
 const express = require('express');
 const compression = require('compression');
@@ -55,6 +56,9 @@ app.use('/api/ping' , function(request : Request , response : Response ) {
         ping : "pinged"
     })
 })
+
+
+app.use('/api/expstart' , registerRoutes());
 
 connectDb().then(
     () => {
