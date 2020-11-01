@@ -1,4 +1,6 @@
 import {Request , Response} from "express";
+import { constants } from "./utils/constant";
+import APPLICATION_CONFIG from './config'
 
 const express = require('express');
 const compression = require('compression');
@@ -53,6 +55,6 @@ app.use('/api/ping' , function(request : Request , response : Response ) {
     })
 })
 
-app.listen(3000 , () => {
-    console.log('Awesome!! Server has started at port:' ,3000)
+app.listen(APPLICATION_CONFIG.PORT , () => {
+    console.log(constants.START_MESSAGE,APPLICATION_CONFIG.PORT)
 })

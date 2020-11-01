@@ -12,6 +12,10 @@
 /logs
 
 
+#environment
+.env
+
+
 # npm package
 package-lock.json
 
