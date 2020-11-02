@@ -1,7 +1,7 @@
 # Express Pilot
 A starter application using Express framework which provides a starting configuration for API. This application also comes with configuration for the MongoDB and example routes.
 
-This app uses some recommended configuration which are must for a API and provides a good structure to your code. This is also more programmer friendly as it uses typescript. With all this in place anyone can start there work without having to think about the structure and best practices.
+This app uses some recommended configuration which are a must for an API and provides a good structure to your code. This was made more programmer friendly by using typescript as its default language. With all this in place anyone can start there work without having to think about the structure and best practices.
 
 
 <h3>Getting Started</h3>
