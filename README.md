@@ -17,6 +17,15 @@ This app uses some recommended configuration which are a must for an API and pro
   <li>npm start</li>
 </ol>
 
+<h3>List of Packages</h3>
 
- 
   
+|Package | Description|
+|--------|------------|
+| body-parser | Parse incoming request bodies in a middleware before your handlers|
+| compression | The middleware will attempt to compress response bodies for all request that traverse through the middleware | 
+| cors | CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options |
+| dotenv | Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env |
+| express | Fast, unopinionated, minimalist web framework for node |
+| helmet | Helmet helps you secure your Express apps by setting various HTTP headers |
+| mongoose | Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment |
