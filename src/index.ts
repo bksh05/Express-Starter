@@ -1,12 +1,11 @@
 import express, {Request , Response} from "express";
 import { constants } from "./utils/constant";
 import {APPLICATION_CONFIG} from './config'
-import { connectDb } from "./models";
+import { connectDb } from "./utils/db";
 import cors from 'cors';
 import registerRoutes from "./controllers";
 import helmet from 'helmet';
 import compression from 'compression';
-
 
 const app = express();
 
@@ -36,7 +35,7 @@ var corsOptions = {
   }
 app.use(cors(corsOptions));
 
-
+app.use(express.json());
 
 /**
  * Ping request

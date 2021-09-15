@@ -4,38 +4,36 @@ import { createUser, getAllUser } from "../../database"
 
 
 
-/**
- * 
- * @param request 
- * @param response 
- * A function to create a single user in the database.
- */
-const registerUser = async (request: Request, response: Response) => {
-    const user: User = request.body;
-    const result : User = await createUser(user);
-    response.json(result);
-}
+export class UserController {
 
-/**
- * 
- * @param request 
- * @param response 
- * A function to fetch all the user from the database
- */
-const fetchAllUser = async (request: Request, response: Response) => {
-    const allUsers : Array<User> = await getAllUser();
-    response.json(allUsers);
+    /**
+     * 
+     * @param request 
+     * @param response 
+     * A function to create a single user in the database.
+     */
+    static async registerUser(request: Request, response: Response) {
+        console.log(request.body)
+        const user: User = request.body;
+        const result: User = await createUser(user);
+        response.send(result);
+    }
 
-}
 
-/**
- * All the function defined above are binded to routes
- * When a certain route is triggered then respective function are called according to request methods
- */
-module.exports = {
-    userRoute: (router: Router) => {
-        return router.route('/user')
-            .get(fetchAllUser)
-            .post(registerUser);
+    /**
+     * 
+     * @param request 
+     * @param response 
+     * A function to fetch all the user from the database
+     */
+    static async fetchAllUser(request: Request, response: Response) {
+        const allUsers: Array<User> = await getAllUser();
+        response.send(allUsers);
+
+    }
+
+
+    static initRoutes(router : Router): any{
+        return router.route('/user').get(this.fetchAllUser).post(this.registerUser);
     }
 }
