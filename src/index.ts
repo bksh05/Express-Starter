@@ -1,15 +1,14 @@
-import {Request , Response} from "express";
+import express, {Request , Response} from "express";
 import { constants } from "./utils/constant";
 import {APPLICATION_CONFIG} from './config'
 import { connectDb } from "./models";
+import cors from 'cors';
 import registerRoutes from "./controllers";
+import helmet from 'helmet';
+import compression from 'compression';
 
-const express = require('express');
-const compression = require('compression');
-const helmet = require('helmet');
-const cors = require('cors')
+
 const app = express();
-const bodyParser = require('body-parser');
 
 
 /**
@@ -39,17 +38,6 @@ app.use(cors(corsOptions));
 
 
 
-
-/**
- * Parse incoming request bodies in a middleware before your handlers
- * By using this request body of a request is accessible
- * For more detail : https://github.com/expressjs/body-parser
- */
-
-app.use(bodyParser.urlencoded({ extended: false })) // parse application/x-www-form-urlencoded
-app.use(bodyParser.json()) // parse application/json
-
-
 /**
  * Ping request
  * To test if the server is running
@@ -63,12 +51,12 @@ app.use('/api/ping' , function(request : Request , response : Response ) {
 /**
  * Registering all routes 
  */
-app.use('/api/expstart' , registerRoutes());
+app.use('/api/exp-start' , registerRoutes());
 
 
 /**
  * 1. Connect to database
- * 2. If connection to database is complete then start the application
+ * 2. If connection to database is complete then re-start the application
  */
 connectDb().then(
     () => {

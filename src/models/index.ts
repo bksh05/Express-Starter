@@ -4,24 +4,10 @@ import UserModel from './user';
 
 
 /**
- * Some mongoose configuration
- */
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true); 
-
-/**
  * Function to connect to mongodb
  */
 const connectDb = () => {
-    const options = {
-        keepAlive : DATABASE_CONFIG.KEEP_ALIVE,
-        user : DATABASE_CONFIG.USER,
-        pass : DATABASE_CONFIG.PASSWORD,
-        poolSize : DATABASE_CONFIG.POOL_SIZE,
-    }
-    return mongoose.connect(DATABASE_CONFIG.URL , options);
+    return mongoose.connect(DATABASE_CONFIG.URL);
 };
 
 
