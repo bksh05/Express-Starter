@@ -25,7 +25,7 @@ app.use(helmet());
 
 
 /**
- * A middleware to specify which application is allowed to recieve the response
+ * A middleware to specify which application is allowed to receive the response
  * Change "http://localhost:4200" to desired url
  * The package used here provide a lot of configuration and can be modified as per requirement
  * For more details : https://github.com/expressjs/cors

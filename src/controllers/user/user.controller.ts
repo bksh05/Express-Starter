@@ -5,7 +5,6 @@ import { constants } from "../../utils/constant";
 import { generatePassword, getServerResponse, issueJWT, validatePassword } from "../../utils/helpers";
 import { getUserByEmailId } from "../../database/user/user.database";
 import passport from "passport";
-import { Error } from "mongoose";
 
 
 
