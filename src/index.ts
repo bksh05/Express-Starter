@@ -1,11 +1,12 @@
 import express, {Request , Response} from "express";
 import { constants } from "./utils/constant";
-import {APPLICATION_CONFIG} from './config'
+import {APPLICATION_CONFIG, initializePassport} from './config'
 import { connectDb } from "./utils/db";
 import cors from 'cors';
 import registerRoutes from "./controllers";
 import helmet from 'helmet';
 import compression from 'compression';
+import passport from 'passport';
 
 const app = express();
 
@@ -35,7 +36,18 @@ var corsOptions = {
   }
 app.use(cors(corsOptions));
 
+// Parses body from the request
 app.use(express.json());
+app.use(express.urlencoded({extended : true}));
+
+/**
+ * Passport is package that checks and validates JWTs 
+ * For more details: http://www.passportjs.org
+ */
+initializePassport(passport);
+app.use(passport.initialize());
+
+
 
 /**
  * Ping request

@@ -1,13 +1,14 @@
-import User from '../../interfaces/types/user.type';
+import IUserModel from '../../interfaces/IDocuments/IUser.model';
+import User from '../../interfaces/types/user.interface';
 import {UserModel} from '../../models';
 
 /**
  * 
  * @param user : The details of the user that needs to be created
  */
-const createUser = async (user : User) : Promise<User> => {
-    const result : User = await UserModel.create(user);
-    return result;
+const createUser = async (user : User) : Promise<string> => {
+    const result = await UserModel.create(user);
+    return result._id
 }
 
 /**
@@ -18,14 +19,23 @@ const getAllUser = async () : Promise<Array<User>>=> {
     return result;
 }
 
-export {createUser , getAllUser};
+/**
+ * 
+ * @param emailId emailId of the user
+ * @returns User object
+ * 
+ * Fetch a user based on its emailId.
+ */
+const getUserByEmailId = async (emailId : String) : Promise<IUserModel | null> => {
+    let user : IUserModel | null = await UserModel.findOne({emailId : emailId} , {emailId : 1 , hash : 1 , salt : 1, _id : 1});
+    return user;
+}
+
+export {createUser , getAllUser , getUserByEmailId};
 
 
 
 /**
- * TODO : Add session 
- * TODO : Add error handler
  * TODO : Add Logger
- * TODO : Add common server response format
  * TODO : Add Linter
  */

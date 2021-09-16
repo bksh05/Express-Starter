@@ -6,5 +6,13 @@ import {DATABASE_CONFIG} from '../config';
  * Function to connect to mongodb
  */
 export const connectDb = () => {
-    return mongoose.connect(DATABASE_CONFIG.URL);
+    const options = {
+        useNewUrlParser: true,
+        autoIndex: true, 
+        keepAlive: true,
+        connectTimeoutMS: 10000,
+        socketTimeoutMS: 45000,
+        useUnifiedTopology: true
+    }
+    return mongoose.connect(DATABASE_CONFIG.URL, options);
 };

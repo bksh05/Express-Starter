@@ -2,7 +2,7 @@
  * This loads every parameter in .env file into process.env
  * For more details : https://github.com/motdotla/dotenv
  */
-require('dotenv').config(); 
+require('dotenv').config();
 
 
 /**
@@ -15,5 +15,6 @@ require('dotenv').config();
 
 import APPLICATION_CONFIG from './application.config';
 import DATABASE_CONFIG from './database.config';
+import { initializePassport } from './passport.config';
 
-export  {APPLICATION_CONFIG , DATABASE_CONFIG};
+export { APPLICATION_CONFIG, DATABASE_CONFIG, initializePassport };

@@ -7,6 +7,35 @@
 
 export let constants = {
     START_MESSAGE : "Awesome!!! You app has started and your API is live on PORT:",
-    MONGO_DB_FAIL_MESSAGE : "Failed to connect to Db"
+    MONGO_DB_FAIL_MESSAGE : "Failed to connect to Db",
+
+
+    // Error objects
+
+    BAD_REQUEST :  {
+        code : 400,
+        message : "Bad request"
+    },
+
+    INTERNAL_SERVER_ERROR : {
+        code : 500,
+        message : "Internal server error"
+
+    },
+
+    UNAUTHORIZED : {
+        code : 401,
+        message : "Unauthorized user"
+    },
+
+    INVALID_CREDENTIALS : {
+        code : 401,
+        message : "Either username or password is incorrect"
+    },
+
+    USER_ALREADY_EXIST : {
+        code : 400,
+        message : "User already registered. Please login"
+    }
 
 }
