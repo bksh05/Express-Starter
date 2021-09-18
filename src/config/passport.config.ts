@@ -9,7 +9,11 @@ const options = {
     secretOrKey: SECRET,
 };
 
-
+/**
+ * 
+ * @param passport 
+ * Initializing passport with proper strategy.
+ */
 export function initializePassport(passport : PassportStatic) {
     passport.use(new JWTStrategy(options, async (payload, done) => {
         try {

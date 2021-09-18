@@ -1,9 +1,6 @@
 import crypto from 'crypto';
 import jsonwebtoken from 'jsonwebtoken';
 
-/**
- * -------------- HELPER FUNCTIONS ----------------
- */
 
 /**
  * 

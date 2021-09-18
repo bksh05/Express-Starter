@@ -1,9 +1,8 @@
 import { Request, Response, Router } from "express";
 import User from "../../interfaces/types/user.interface";
-import { createUser, getAllUser } from "../../database"
+import { createUser, getAllUser, getLoginCredentialByEmailId} from "../../database"
 import { constants } from "../../utils/constant";
 import { generatePassword, getServerResponse, issueJWT, validatePassword } from "../../utils/helpers";
-import { getUserByEmailId } from "../../database/user/user.database";
 import passport from "passport";
 
 
@@ -11,10 +10,9 @@ import passport from "passport";
 export class UserController {
 
     /**
-     * 
      * @param request 
      * @param response 
-     * A function to create a single user in the database.
+     * A function to register a user.
      */
     static async registerUser(request: Request, response: Response) {
         try {
@@ -22,7 +20,7 @@ export class UserController {
                 const saltHash = generatePassword(request.body.password);
                 const salt = saltHash.salt;
                 const hash = saltHash.hash;
-                const user = await getUserByEmailId(request.body.email);
+                const user = await getLoginCredentialByEmailId(request.body.email);
                 if (!user) {
                     const userId = await createUser({
                         email: request.body.email,
@@ -69,13 +67,19 @@ export class UserController {
 
     }
 
+    /**
+     * 
+     * @param request 
+     * @param response 
+     * User Login API
+     */
     static async login(request: Request, response: Response) {
         const username = request.body.username;
         const password = request.body.password;
 
         try {
             if (username && password) {
-                const user = await getUserByEmailId(username);
+                const user = await getLoginCredentialByEmailId(username);
                 if (user) {
                     if (validatePassword(password, user.hash, user.salt)) {
                         const token = issueJWT(user._id);

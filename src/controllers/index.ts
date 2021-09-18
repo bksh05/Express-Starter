@@ -9,8 +9,6 @@ import {UserController} from './user/user.controller';
  *  2. Define a function that will register all the routes that are imported into a common Router object
  *  3. Export the function
  */
-
-
 function registerRoutes(){
     const router : Router = Router();
     UserController.initRoutes(router);

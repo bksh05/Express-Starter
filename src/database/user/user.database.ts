@@ -2,8 +2,7 @@ import IUserModel from '../../interfaces/IDocuments/IUser.model';
 import User from '../../interfaces/types/user.interface';
 import {UserModel} from '../../models';
 
-/**
- * 
+/** 
  * @param user : The details of the user that needs to be created
  */
 const createUser = async (user : User) : Promise<string> => {
@@ -26,12 +25,12 @@ const getAllUser = async () : Promise<Array<User>>=> {
  * 
  * Fetch a user based on its emailId.
  */
-const getUserByEmailId = async (emailId : String) : Promise<IUserModel | null> => {
+const getLoginCredentialByEmailId = async (emailId : String) : Promise<IUserModel | null> => {
     let user : IUserModel | null = await UserModel.findOne({emailId : emailId} , {emailId : 1 , hash : 1 , salt : 1, _id : 1});
     return user;
 }
 
-export {createUser , getAllUser , getUserByEmailId};
+export {createUser , getAllUser , getLoginCredentialByEmailId};
 
 
 

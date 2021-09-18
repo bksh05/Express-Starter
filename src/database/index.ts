@@ -7,6 +7,6 @@
  */
 
  
-import {createUser , getAllUser} from './user/user.database';
+import {createUser , getAllUser , getLoginCredentialByEmailId } from './user/user.database';
 
-export {createUser , getAllUser}
+export {createUser , getAllUser , getLoginCredentialByEmailId}
