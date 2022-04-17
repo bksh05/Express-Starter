@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {UserController} from './user/user.controller';
+import {initRoutes as userInitRoutes} from './user/user.controller';
 
 
 /**
@@ -11,7 +11,7 @@ import {UserController} from './user/user.controller';
  */
 function registerRoutes(){
     const router : Router = Router();
-    UserController.initRoutes(router);
+    userInitRoutes(router);
     return router;
     
 }
