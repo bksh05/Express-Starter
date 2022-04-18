@@ -366,3 +366,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+
+# Docker created persistant storage. Not required to commit
+mongo-volume/

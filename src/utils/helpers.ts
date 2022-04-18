@@ -45,7 +45,6 @@ export function issueJWT(id: string) {
         sub: _id,
         iat: Date.now()
     };
-    console.log((process.env as any).SECRET);
     const signedToken = jsonwebtoken.sign(payload, (process.env as any).SECRET, { expiresIn: expiresIn });
 
     return {
