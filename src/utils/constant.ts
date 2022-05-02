@@ -6,8 +6,9 @@
  */
 
 export let constants = {
-    START_MESSAGE : "Awesome!!! You app has started and your API is live on PORT:",
+    START_MESSAGE : "Awesome!!! Your app has started and your API is live on PORT:",
     MONGO_DB_FAIL_MESSAGE : "Failed to connect to Db",
+    OTP_LENGTH : 5,
 
 
     // Error objects
@@ -30,12 +31,22 @@ export let constants = {
 
     INVALID_CREDENTIALS : {
         code : 401,
-        message : "Either username or password is incorrect"
+        message : "The credentials are incorrect. Please verify and try again"
     },
 
     USER_ALREADY_EXIST : {
         code : 400,
         message : "User already registered. Please login"
+    },
+
+    UNREGISTERED_USER : {
+        code: 400,
+        message: "USER with given credential does not exists"
+    },
+
+    PASSWORD_CHANGE_FAILED: {
+        code: 400,
+        message: "Password change request failed. Try again later"
     }
 
 }

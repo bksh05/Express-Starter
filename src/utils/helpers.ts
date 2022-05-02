@@ -58,3 +58,11 @@ export function getServerResponse(success: boolean, body: any, error?: { code: n
     const response = { success: success, body: body , error: error };
     return response;
 }
+
+
+export async function sendMail(to: string, subject: string, text?: string , html?: string){
+    // TODO: send mail logic can be different for different user and hence left blank for the user of this code to fill.
+
+    // Dummy response
+    return true;
+}
