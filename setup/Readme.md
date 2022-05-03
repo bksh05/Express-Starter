@@ -1,6 +1,7 @@
-Some setups on docker to have smooth setup experience.
 
 ### Mongo
+
+#### Run mongo on docker 
 
 ```
 cd setup/mongo
