@@ -29,41 +29,46 @@ import {
  */
 async function registerUser(request: Request, response: Response) {
   try {
-    if (request.body.email && request.body.name && request.body.password) {
-      const saltHash = generatePassword(request.body.password);
-      const salt = saltHash.salt;
-      const hash = saltHash.hash;
-      const user = await getLoginCredentialByEmailId(request.body.email);
-      if (!user) {
-        const userId = await createUser({
-          email: request.body.email,
-          name: request.body.name,
-          salt: salt,
-          hash: hash,
-          image: request.body.image ?? "image.png",
-        });
-        const token = issueJWT(userId);
-        const serverResponse = getServerResponse(true, {
-          token: token.token,
-          expires: token.expires,
-        });
-        response.send(serverResponse);
-      } else {
-        const serverResponse = getServerResponse(
-          false,
-          {},
-          constants.USER_ALREADY_EXIST
-        );
-        response.status(constants.USER_ALREADY_EXIST.code).send(serverResponse);
-      }
-    } else {
+    if (!request.body.email || !request.body.name || !request.body.password) {
+      // Check if every input required is available
       const serverResponse = getServerResponse(
         false,
         {},
         constants.BAD_REQUEST
       );
-      response.status(constants.BAD_REQUEST.code).send(serverResponse);
+      return response.status(constants.BAD_REQUEST.code).send(serverResponse);
     }
+
+    const saltHash = generatePassword(request.body.password);
+    const salt = saltHash.salt;
+    const hash = saltHash.hash;
+    const user = await getLoginCredentialByEmailId(request.body.email);
+
+    if (user) {
+      // New user with same email cannot be created
+      const serverResponse = getServerResponse(
+        false,
+        {},
+        constants.USER_ALREADY_EXIST
+      );
+      return response
+        .status(constants.USER_ALREADY_EXIST.code)
+        .send(serverResponse);
+    }
+
+    const userId = await createUser({
+      email: request.body.email,
+      name: request.body.name,
+      salt: salt,
+      hash: hash,
+      image: request.body.image ?? "image.png",
+    });
+    const token = issueJWT(userId);
+    const serverResponse = getServerResponse(true, {
+      token: token.token,
+      expires: token.expires,
+    });
+    return response.send(serverResponse);
   } catch (e) {
     console.log(e);
     const serverResponse = getServerResponse(
@@ -71,7 +76,9 @@ async function registerUser(request: Request, response: Response) {
       {},
       constants.INTERNAL_SERVER_ERROR
     );
-    response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
+    return response
+      .status(constants.INTERNAL_SERVER_ERROR.code)
+      .send(serverResponse);
   }
 }
 
@@ -82,6 +89,8 @@ async function registerUser(request: Request, response: Response) {
  * A function to fetch all the user from the database
  */
 async function fetchAllUser(request: Request, response: Response) {
+  // Dummy controller to for reference
+
   const allUsers: Array<User> = await getAllUser();
   response.send(allUsers);
 }
@@ -96,33 +105,34 @@ async function login(request: Request, response: Response) {
   const password = request.body.password;
 
   try {
-    if (username && password) {
-      const user = await getLoginCredentialByEmailId(username);
-      if (user) {
-        if (validatePassword(password, user.hash, user.salt)) {
-          const token = issueJWT(user._id);
-          const serverResponse = getServerResponse(true, {
-            token: token.token,
-            expires: token.expires,
-          });
-          return response.send(serverResponse);
-        }
-      }
-
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.INVALID_CREDENTIALS
-      );
-      response.status(constants.INVALID_CREDENTIALS.code).send(serverResponse);
-    } else {
+    if (!username || !password) {
       const serverResponse = getServerResponse(
         false,
         {},
         constants.BAD_REQUEST
       );
-      response.status(constants.BAD_REQUEST.code).send(serverResponse);
+      return response.status(constants.BAD_REQUEST.code).send(serverResponse);
     }
+
+    const user = await getLoginCredentialByEmailId(username);
+
+    if (!user || !validatePassword(password, user.hash, user.salt)) {
+      const serverResponse = getServerResponse(
+        false,
+        {},
+        constants.INVALID_CREDENTIALS
+      );
+      return response
+        .status(constants.INVALID_CREDENTIALS.code)
+        .send(serverResponse);
+    }
+
+    const token = issueJWT(user._id);
+    const serverResponse = getServerResponse(true, {
+      token: token.token,
+      expires: token.expires,
+    });
+    return response.send(serverResponse);
   } catch (e) {
     console.log(e);
     const serverResponse = getServerResponse(
@@ -130,7 +140,9 @@ async function login(request: Request, response: Response) {
       {},
       constants.INTERNAL_SERVER_ERROR
     );
-    response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
+    return response
+      .status(constants.INTERNAL_SERVER_ERROR.code)
+      .send(serverResponse);
   }
 }
 
@@ -138,45 +150,48 @@ async function sendOTP(request: Request, response: Response) {
   try {
     let otp = "";
     let email = request.body.email;
-    if (email && (await isExistingUser(email))) {
-      for (let i = 0; i < constants.OTP_LENGTH; i++) {
-        otp += crypto.randomInt(10);
-      }
 
-      const isOtpSaved = await saveOTP(email, otp);
-
-      if (!isOtpSaved) {
-        const serverResponse = getServerResponse(true, {
-          message: "OTP already sent. Try after 1 minute",
-        });
-        return response.send(serverResponse);
-      }
-
-      const isMailSent = await sendMail(
-        email,
-        "Otp for reset password",
-        `Your otp for reset password is : ${otp}`
-      );
-
-      if (!isMailSent) {
-        throw new Error("Email not sent");
-      }
-
-      console.log(otp);
-
-      const serverResponse = getServerResponse(true, {
-        message: "OTP sent to your email.",
-      });
-
-      response.send(serverResponse);
-    } else {
+    if (!email || !(await isExistingUser(email))) {
       const serverResponse = getServerResponse(
         false,
         {},
         constants.UNREGISTERED_USER
       );
-      response.status(constants.UNREGISTERED_USER.code).send(serverResponse);
+      return response
+        .status(constants.UNREGISTERED_USER.code)
+        .send(serverResponse);
     }
+
+    for (let i = 0; i < constants.OTP_LENGTH; i++) {
+      otp += crypto.randomInt(10);
+    }
+
+    const isOtpSaved = await saveOTP(email, otp);
+
+    if (!isOtpSaved) {
+      const serverResponse = getServerResponse(true, {
+        message: "OTP already sent. Try after 1 minute",
+      });
+      return response.send(serverResponse);
+    }
+
+    const isMailSent = await sendMail(
+      email,
+      "Otp for reset password",
+      `Your otp for reset password is : ${otp}`
+    );
+
+    if (!isMailSent) {
+      throw new Error("Email not sent");
+    }
+
+    console.log(otp);
+
+    const serverResponse = getServerResponse(true, {
+      message: "OTP sent to your email.",
+    });
+
+    return response.send(serverResponse);
   } catch (e) {
     console.log(e);
     const serverResponse = getServerResponse(
@@ -184,7 +199,9 @@ async function sendOTP(request: Request, response: Response) {
       {},
       constants.INTERNAL_SERVER_ERROR
     );
-    response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
+    return response
+      .status(constants.INTERNAL_SERVER_ERROR.code)
+      .send(serverResponse);
   }
 }
 
@@ -281,7 +298,6 @@ async function updatePassword(request: Request, response: Response) {
   }
 
   try {
- 
     const saltHash = generatePassword(newPassword);
     const salt = saltHash.salt;
     const hash = saltHash.hash;
@@ -308,7 +324,9 @@ async function updatePassword(request: Request, response: Response) {
       {},
       constants.INTERNAL_SERVER_ERROR
     );
-    return response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
+    return response
+      .status(constants.INTERNAL_SERVER_ERROR.code)
+      .send(serverResponse);
   }
 }
 
