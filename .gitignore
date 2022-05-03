@@ -370,3 +370,4 @@ MigrationBackup/
 
 # Docker created persistant storage. Not required to commit
 mongo-volume/
+.vscode/

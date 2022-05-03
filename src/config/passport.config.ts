@@ -1,6 +1,6 @@
 import { PassportStatic } from 'passport';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
-import { UserModel } from '../models';
+import UserModel from '../models/user';
 
 const SECRET = ((process.env) as any).SECRET;
 

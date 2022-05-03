@@ -1,10 +1,6 @@
 import { Request, Response, Router } from "express";
 import User from "../../interfaces/types/user.interface";
-import {
-  createUser,
-  getAllUser,
-  getLoginCredentialByEmailId,
-} from "../../database";
+import { createUser, getAllUser, getLoginCredentialByEmailId } from "../../database";
 import { constants } from "../../utils/constant";
 import {
   generatePassword,
@@ -21,6 +17,7 @@ import {
   saveOTP,
   validateOTP,
 } from "../../database/user/user.database";
+import { logger } from "../../utils/logger";
 
 /**
  * @param request
@@ -31,11 +28,9 @@ async function registerUser(request: Request, response: Response) {
   try {
     if (!request.body.email || !request.body.name || !request.body.password) {
       // Check if every input required is available
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.BAD_REQUEST
-      );
+      const serverResponse = getServerResponse(false, {}, constants.BAD_REQUEST);
+
+      logger.info(serverResponse);
       return response.status(constants.BAD_REQUEST.code).send(serverResponse);
     }
 
@@ -46,14 +41,11 @@ async function registerUser(request: Request, response: Response) {
 
     if (user) {
       // New user with same email cannot be created
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.USER_ALREADY_EXIST
-      );
-      return response
-        .status(constants.USER_ALREADY_EXIST.code)
-        .send(serverResponse);
+      const serverResponse = getServerResponse(false, {}, constants.USER_ALREADY_EXIST);
+
+      logger.info(serverResponse);
+
+      return response.status(constants.USER_ALREADY_EXIST.code).send(serverResponse);
     }
 
     const userId = await createUser({
@@ -68,17 +60,14 @@ async function registerUser(request: Request, response: Response) {
       token: token.token,
       expires: token.expires,
     });
+
+    logger.info(serverResponse);
+
     return response.send(serverResponse);
-  } catch (e) {
-    console.log(e);
-    const serverResponse = getServerResponse(
-      false,
-      {},
-      constants.INTERNAL_SERVER_ERROR
-    );
-    return response
-      .status(constants.INTERNAL_SERVER_ERROR.code)
-      .send(serverResponse);
+  } catch (error) {
+    logger.error(error);
+    const serverResponse = getServerResponse(false, {}, constants.INTERNAL_SERVER_ERROR);
+    return response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
   }
 }
 
@@ -90,7 +79,6 @@ async function registerUser(request: Request, response: Response) {
  */
 async function fetchAllUser(request: Request, response: Response) {
   // Dummy controller to for reference
-
   const allUsers: Array<User> = await getAllUser();
   response.send(allUsers);
 }
@@ -106,25 +94,21 @@ async function login(request: Request, response: Response) {
 
   try {
     if (!username || !password) {
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.BAD_REQUEST
-      );
+      const serverResponse = getServerResponse(false, {}, constants.BAD_REQUEST);
+
+      logger.info(serverResponse);
+
       return response.status(constants.BAD_REQUEST.code).send(serverResponse);
     }
 
     const user = await getLoginCredentialByEmailId(username);
 
     if (!user || !validatePassword(password, user.hash, user.salt)) {
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.INVALID_CREDENTIALS
-      );
-      return response
-        .status(constants.INVALID_CREDENTIALS.code)
-        .send(serverResponse);
+      const serverResponse = getServerResponse(false, {}, constants.INVALID_CREDENTIALS);
+
+      logger.info(serverResponse);
+
+      return response.status(constants.INVALID_CREDENTIALS.code).send(serverResponse);
     }
 
     const token = issueJWT(user._id);
@@ -132,17 +116,14 @@ async function login(request: Request, response: Response) {
       token: token.token,
       expires: token.expires,
     });
+
+    logger.info(serverResponse);
+
     return response.send(serverResponse);
-  } catch (e) {
-    console.log(e);
-    const serverResponse = getServerResponse(
-      false,
-      {},
-      constants.INTERNAL_SERVER_ERROR
-    );
-    return response
-      .status(constants.INTERNAL_SERVER_ERROR.code)
-      .send(serverResponse);
+  } catch (error) {
+    logger.error(error);
+    const serverResponse = getServerResponse(false, {}, constants.INTERNAL_SERVER_ERROR);
+    return response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
   }
 }
 
@@ -152,14 +133,11 @@ async function sendOTP(request: Request, response: Response) {
     let email = request.body.email;
 
     if (!email || !(await isExistingUser(email))) {
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.UNREGISTERED_USER
-      );
-      return response
-        .status(constants.UNREGISTERED_USER.code)
-        .send(serverResponse);
+      const serverResponse = getServerResponse(false, {}, constants.UNREGISTERED_USER);
+
+      logger.info(serverResponse);
+
+      return response.status(constants.UNREGISTERED_USER.code).send(serverResponse);
     }
 
     for (let i = 0; i < constants.OTP_LENGTH; i++) {
@@ -172,6 +150,7 @@ async function sendOTP(request: Request, response: Response) {
       const serverResponse = getServerResponse(true, {
         message: "OTP already sent. Try after 1 minute",
       });
+      logger.info(serverResponse);
       return response.send(serverResponse);
     }
 
@@ -191,17 +170,12 @@ async function sendOTP(request: Request, response: Response) {
       message: "OTP sent to your email.",
     });
 
+    logger.info(serverResponse);
     return response.send(serverResponse);
-  } catch (e) {
-    console.log(e);
-    const serverResponse = getServerResponse(
-      false,
-      {},
-      constants.INTERNAL_SERVER_ERROR
-    );
-    return response
-      .status(constants.INTERNAL_SERVER_ERROR.code)
-      .send(serverResponse);
+  } catch (error) {
+    logger.error(error);
+    const serverResponse = getServerResponse(false, {}, constants.INTERNAL_SERVER_ERROR);
+    return response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
   }
 }
 
@@ -212,25 +186,22 @@ async function resetPassword(request: Request, response: Response) {
 
   if (!email || !otp || !newPassword) {
     const serverResponse = getServerResponse(false, {}, constants.BAD_REQUEST);
+    logger.info(serverResponse);
     return response.status(constants.BAD_REQUEST.code).send(serverResponse);
   }
 
   try {
     if (!(await isExistingUser(email))) {
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.UNREGISTERED_USER
-      );
-      return response
-        .status(constants.UNREGISTERED_USER.code)
-        .send(serverResponse);
+      const serverResponse = getServerResponse(false, {}, constants.UNREGISTERED_USER);
+      logger.info(serverResponse);
+      return response.status(constants.UNREGISTERED_USER.code).send(serverResponse);
     }
 
     if (!(await validateOTP(email, otp))) {
       const serverResponse = getServerResponse(true, {
         message: "Incorrect otp",
       });
+      logger.info(serverResponse);
       return response.send(serverResponse);
     }
 
@@ -239,30 +210,20 @@ async function resetPassword(request: Request, response: Response) {
     const hash = saltHash.hash;
 
     if (!(await changePassword(email, salt, hash))) {
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.PASSWORD_CHANGE_FAILED
-      );
-      return response
-        .status(constants.PASSWORD_CHANGE_FAILED.code)
-        .send(serverResponse);
+      const serverResponse = getServerResponse(false, {}, constants.PASSWORD_CHANGE_FAILED);
+      logger.info(serverResponse);
+      return response.status(constants.PASSWORD_CHANGE_FAILED.code).send(serverResponse);
     }
 
     const serverResponse = getServerResponse(true, {
       message: "Password changed successfully",
     });
+    logger.info(serverResponse);
     return response.send(serverResponse);
-  } catch (e) {
-    console.log(e);
-    const serverResponse = getServerResponse(
-      false,
-      {},
-      constants.INTERNAL_SERVER_ERROR
-    );
-    return response
-      .status(constants.INTERNAL_SERVER_ERROR.code)
-      .send(serverResponse);
+  } catch (error) {
+    logger.error(error);
+    const serverResponse = getServerResponse(false, {}, constants.INTERNAL_SERVER_ERROR);
+    return response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
   }
 }
 
@@ -271,29 +232,23 @@ async function updatePassword(request: Request, response: Response) {
 
   if (!loggedInUser) {
     const serverResponse = getServerResponse(false, {}, constants.UNAUTHORIZED);
+    logger.info(serverResponse);
     return response.status(constants.UNAUTHORIZED.code).send(serverResponse);
   }
 
   const oldPassword = request.body.oldPassword;
 
-  if (
-    !oldPassword ||
-    !validatePassword(oldPassword, loggedInUser.hash, loggedInUser.salt)
-  ) {
-    const serverResponse = getServerResponse(
-      false,
-      {},
-      constants.INVALID_CREDENTIALS
-    );
-    return response
-      .status(constants.INVALID_CREDENTIALS.code)
-      .send(serverResponse);
+  if (!oldPassword || !validatePassword(oldPassword, loggedInUser.hash, loggedInUser.salt)) {
+    const serverResponse = getServerResponse(false, {}, constants.INVALID_CREDENTIALS);
+    logger.info(serverResponse);
+    return response.status(constants.INVALID_CREDENTIALS.code).send(serverResponse);
   }
 
   const newPassword = request.body.password;
 
   if (!newPassword) {
     const serverResponse = getServerResponse(false, {}, constants.BAD_REQUEST);
+    logger.info(serverResponse);
     return response.status(constants.BAD_REQUEST.code).send(serverResponse);
   }
 
@@ -303,30 +258,20 @@ async function updatePassword(request: Request, response: Response) {
     const hash = saltHash.hash;
 
     if (!(await changePassword(loggedInUser.email, salt, hash))) {
-      const serverResponse = getServerResponse(
-        false,
-        {},
-        constants.PASSWORD_CHANGE_FAILED
-      );
-      return response
-        .status(constants.PASSWORD_CHANGE_FAILED.code)
-        .send(serverResponse);
+      const serverResponse = getServerResponse(false, {}, constants.PASSWORD_CHANGE_FAILED);
+      logger.info(serverResponse);
+      return response.status(constants.PASSWORD_CHANGE_FAILED.code).send(serverResponse);
     }
 
     const serverResponse = getServerResponse(true, {
       message: "Password updated successfully",
     });
+    logger.info(serverResponse);
     return response.send(serverResponse);
-  } catch (e) {
-    console.log(e);
-    const serverResponse = getServerResponse(
-      false,
-      {},
-      constants.INTERNAL_SERVER_ERROR
-    );
-    return response
-      .status(constants.INTERNAL_SERVER_ERROR.code)
-      .send(serverResponse);
+  } catch (error) {
+    logger.error(error);
+    const serverResponse = getServerResponse(false, {}, constants.INTERNAL_SERVER_ERROR);
+    return response.status(constants.INTERNAL_SERVER_ERROR.code).send(serverResponse);
   }
 }
 
@@ -337,9 +282,7 @@ export function initRoutes(router: Router): any {
   router.route("/reset-password").post(resetPassword);
 
   // Authenticated route
-  router
-    .route("/user")
-    .get(passport.authenticate("jwt", { session: false }), fetchAllUser);
+  router.route("/user").get(passport.authenticate("jwt", { session: false }), fetchAllUser);
 
   router
     .route("/update-password")
