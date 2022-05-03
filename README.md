@@ -8,13 +8,13 @@ Boilerplate Project for building RESTful APIs and microservices using Node.js, E
   <li> Typescript integration </li>
   <li> ES2017 latest features like Async/Await </li>
   <li> Cors Enabled </li>
-  <li> Uses helmet to set some HTTP headers for security </li>
-  <li> Load environment variables from .env files with dotenv </li>
-  <li> JWT based Authentication and Authorization for the APIs using <b>passport.js</b></li>
+  <li> Uses <a href="https://github.com/helmetjs/helmet">helmet</a> to set some HTTP headers for security </li>
+  <li> Load environment variables from .env files with <a href="https://github.com/rolodato/dotenv-safe">dotenv</a></li>
+  <li> JWT based Authentication and Authorization for the APIs using <a href="https://www.passportjs.org/">passport.js</a></li>
   <li> Predefined Register and Login api</li>
   <li> Forgot and reset password flow</l1>
   <li> Example of predefined routes with jwt verification </li>
-  <li> Logging mechanism using <b>winston</b> logger </li>
+  <li> Logging mechanism using <a href="https://github.com/winstonjs/winston">winston</a> logger </li>
 </ul>
 
 
