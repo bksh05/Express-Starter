@@ -1,28 +1,54 @@
 # Express Pilot
-A starter application using Express framework which provides a starting configuration for API. This application also comes with configuration for the MongoDB and example routes.
 
-This app uses some recommended configuration which are a must for an API and provides a good structure to the code. This was made more programmer friendly by using typescript as its default language. With all this in place anyone can start there work without having to think about the structure and best practices.
+Boilerplate Project for building RESTful APIs and microservices using Node.js, Express, Typescript, and MongoDB.
 
-## Prerequisites
-<ul>
-  <li> Node </li>
-  <li> Mongo (Make sure mongo service is running)</li>
-</ul>
-
-## Getting Started
-<ol>
-  <li>Clone the project</li>
-  <li>Create .env file as instructed in .env-example.</li>
-  <li>npm install</li>
-  <li>npm start</li>
-</ol>
 
 ## Key Highlights
-
-<ol>
-  <li> Provide credentials using environment variables. </li>
-  <li> JWT based Authentication and Authorization for the APIs using passport.js</li>
+<ul>
+  <li> Typescript integration </li>
+  <li> ES2017 latest features like Async/Await </li>
+  <li> Cors Enabled </li>
+  <li> Uses helmet to set some HTTP headers for security </li>
+  <li> Load environment variables from .env files with dotenv </li>
+  <li> JWT based Authentication and Authorization for the APIs using <b>passport.js</b></li>
   <li> Predefined Register and Login api</li>
-  <li> Example of predefined routes </li>
-</ol>
+  <li> Forgot and reset password flow</l1>
+  <li> Example of predefined routes with jwt verification </li>
+  <li> Logging mechanism using <b>winston</b> logger </li>
+</ul>
+
+
+## Requirements
+<ul>
+  <li> <a href="https://nodejs.org/en/download/current/" target="_blank">Node</a> </li>
+  <li> Mongo or <a href="">Docker</a></li>
+</ul>
+
+
+## Getting Started
+
+#### Clone the repo
+```
+git clone https://github.com/bksh05/Express-Pilot.git
+
+cd Express-Pilot/
+```
+
+#### Install dependencies
+```
+npm install
+```
+
+#### Set environment variables
+```
+cp .env-example .env
+```
+
+#### Populate the .env file with your own configuration
+
+  The configuration depends upon your mongo installation. If you don't have mongo installed you can check mongo website or check steps here to run mongodb on docker.
   
+#### Run it locally
+```
+npm start
+```
