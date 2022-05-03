@@ -46,7 +46,7 @@ cp .env-example .env
 
 #### Populate the .env file with your own configuration
 
-  The configuration depends upon your mongo installation. If you don't have mongo installed you can check mongo <a href="https://www.mongodb.com/docs/manual/installation/">docs</a> or check steps here to run mongodb on docker.
+  The configuration depends upon your mongo installation. If you don't have mongo installed you can check mongo <a href="https://www.mongodb.com/docs/manual/installation/">docs</a> or check steps <a href="https://github.com/bksh05/Express-Pilot/blob/main/setup/Readme.md"> here </a> to run mongodb on docker.
   
 #### Run it locally
 ```
