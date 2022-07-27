@@ -22,23 +22,23 @@ export async function getAllUser(): Promise<Array<User>> {
 
 /**
  *
- * @param emailId emailId of the user
+ * @param email emailId of the user
  * @returns User object
  *
- * Fetch a user based on its emailId.
+ * Fetch a user based on its email.
  */
 export async function getLoginCredentialByEmailId(
-  emailId: string
+  email: string
 ): Promise<IUserModel | null> {
   let user: IUserModel | null = await UserModel.findOne(
-    { emailId: emailId },
-    { emailId: 1, hash: 1, salt: 1, _id: 1 }
+    { email: email },
+    { email: 1, hash: 1, salt: 1, _id: 1 }
   );
   return user;
 }
 
-export async function isExistingUser(emailId: string): Promise<boolean> {
-  let user: IUserModel | null = await UserModel.findOne({ emailId: emailId });
+export async function isExistingUser(email: string): Promise<boolean> {
+  let user: IUserModel | null = await UserModel.findOne({ email: email });
   return user ? true : false;
 }
 
