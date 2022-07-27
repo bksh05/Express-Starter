@@ -72,18 +72,6 @@ async function registerUser(request: Request, response: Response) {
 }
 
 /**
- *
- * @param request
- * @param response
- * A function to fetch all the user from the database
- */
-async function fetchAllUser(request: Request, response: Response) {
-  // Dummy controller to for reference
-  const allUsers: Array<User> = await getAllUser();
-  response.send(allUsers);
-}
-
-/**
  * @param request
  * @param response
  * User Login API
@@ -282,8 +270,6 @@ export function initRoutes(router: Router): any {
   router.route("/reset-password").post(resetPassword);
 
   // Authenticated route
-  router.route("/user").get(passport.authenticate("jwt", { session: false }), fetchAllUser);
-
   router
     .route("/update-password")
     .post(passport.authenticate("jwt", { session: false }), updatePassword);
