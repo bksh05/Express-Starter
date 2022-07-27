@@ -1,6 +1,5 @@
 import { Request, Response, Router } from "express";
-import User from "../../interfaces/types/user.interface";
-import { createUser, getAllUser, getLoginCredentialByEmailId } from "../../database";
+import { createUser, getLoginCredentialByEmailId } from "../../database";
 import { constants } from "../../utils/constant";
 import {
   generatePassword,
