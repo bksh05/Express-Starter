@@ -12,8 +12,7 @@ import {initRoutes as userInitRoutes} from './user/user.controller';
 function registerRoutes(){
     const router : Router = Router();
     userInitRoutes(router);
-    return router;
-    
+    return router; 
 }
 
 

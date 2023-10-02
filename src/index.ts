@@ -7,6 +7,8 @@ import registerRoutes from "./controllers";
 import helmet from 'helmet';
 import compression from 'compression';
 import passport from 'passport';
+import { checkContentType } from "./middlewares/content-type.middleware";
+import { getServerResponse } from "./utils/helpers";
 
 const app = express();
 
@@ -62,7 +64,15 @@ app.use('/api/ping' , function(request : Request , response : Response ) {
 /**
  * Registering all routes 
  */
-app.use('/api/exp-start' , registerRoutes());
+app.use('/api/express-pilot' , checkContentType , registerRoutes());
+
+
+/**
+ * 404 Route
+ */
+app.use('/', (_: Request, response: Response) => {
+    response.status(404).json(getServerResponse(false, null, {code: 404, message: "Requested resource does not exist"}));
+})
 
 
 /**
