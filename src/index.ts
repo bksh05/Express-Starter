@@ -75,5 +75,7 @@ connectDb().then(
             console.log(constants.START_MESSAGE,APPLICATION_CONFIG.PORT)
         })
     }
-)
+).catch(err => {
+    console.log("Error while connencting db", err)
+})
 
