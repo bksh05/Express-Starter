@@ -45,7 +45,7 @@ export function issueJWT(id: string) {
 
   const payload = {
     sub: _id,
-    iat: Date.now(),
+    iat: Math.floor(Date.now() / 1000),
   };
   const signedToken = jsonwebtoken.sign(payload, (process.env as any).SECRET, {
     expiresIn: expiresIn,
